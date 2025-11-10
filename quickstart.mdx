@@ -1,5 +1,16 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+
+title: Quickstart
 ---
 
+## 3 steps to integrate
+
+```bash
+pip install kaizen-sdk
+```
+
+```python
+from kaizen import KaizenClient
+client = KaizenClient.from_env()
+
+compressed = await client.compress({...})
+```

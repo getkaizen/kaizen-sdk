@@ -1,5 +1,10 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+
+title: Authentication
 ---
 
+By default, the SDK picks up your API key from `KAIZEN_API_KEY` env variable.
+
+You can also pass it manually:
+```python
+KaizenClientConfig(api_key="sk-123")
+```
