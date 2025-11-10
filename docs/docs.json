@@ -6,45 +6,28 @@
         "pages": [
           "index",
           "quickstart",
-          "installation",
-          "authentication"
+          "installation"
         ]
       },
       {
         "group": "SDK Reference",
         "pages": [
-          "sdk/prompts_encode",
-          "sdk/prompts_decode",
           "sdk/compress",
           "sdk/decompress",
-          "sdk/optimize_request"
+          "sdk/encode",
+          "sdk/decode"
         ]
       },
       {
         "group": "Use Cases",
         "pages": [
           "use-cases/token-budgeting",
-          "use-cases/json-payloads",
-          "use-cases/replay-debugging",
-          "use-cases/agent-payloads"
-        ]
-      },
-      {
-        "group": "Integration Guides",
-        "pages": [
-          "integrations/openai",
-          "integrations/claude",
-          "integrations/gemini",
-          "integrations/custom-models"
+          "use-cases/replay-debugging"
         ]
       },
       {
         "group": "API Reference",
-        "pages": [
-          "api/openapi",
-          "api/errors",
-          "api/rate-limits"
-        ]
+        "pages": ["api/openapi"]
       },
       {
         "group": "Changelog",
