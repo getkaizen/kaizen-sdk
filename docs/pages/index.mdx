@@ -1,0 +1,58 @@
+# Overview
+
+Welcome to the official SDK documentation. This SDK provides a suite of highly-performant, production-ready tools for encoding, compressing, and optimizing prompt payloads in data science workflows, LLM applications, and agent infrastructure. Built with reliability and extensibility in mind, this toolkit powers critical layers of modern AI pipelines — from prompt orchestration to debugging and token budgeting.
+
+---
+
+## What is This SDK?
+
+This SDK is a modular layer built on top of your inference or agent-serving stack. It abstracts common pre-processing and optimization steps — such as encoding structured prompts, compressing verbose payloads, or enforcing consistent formatting — into fast, composable functions that can be easily integrated into any AI stack.
+
+Whether you're working with OpenAI, Claude, Gemini, or your own finetuned models, this SDK standardizes the way prompts are prepared, sent, analyzed, and debugged.
+
+---
+
+## Key Capabilities
+
+- **Prompt Encoding & Decoding**\
+  Transform structured JSON-like content into flattened prompt formats (and vice versa), with optional token-awareness and formatting rules.
+- **Payload Compression & Decompression**\
+  Efficiently compress verbose inputs (e.g., audit logs, nested objects, raw HTML, etc.) while preserving fidelity — to stay within token limits.
+- **Token Budgeting**\
+  Get real-time token estimates, max budget calculators, and truncate strategies to fit payloads into model-specific limits.
+- **Request Optimization**\
+  Dynamically reformat or reduce content, strip redundant parts, and prioritize critical instructions — powered by rule-based and LLM-backed heuristics.
+- **Replay & Debugging Tools**\
+  Easily capture, replay, and inspect request payloads in dev/staging environments for traceability and rapid iteration.
+
+---
+
+## When to Use This SDK
+
+This SDK is particularly useful when you:
+
+- Are orchestrating **multi-step LLM agents** that require complex prompt assembly.
+- Need to keep payloads within **tight token constraints** (e.g., 4K/8K/32K limits).
+- Want to enable **structured debugging** for prompt failures or LLM inconsistencies.
+- Handle **client-generated content** at scale, requiring sanitization and compression.
+- Need a consistent way to interoperate with **OpenAI, Claude, Gemini, Mistral**, or **custom models**.
+
+---
+
+## Designed for Critical Workflows
+
+This SDK is actively used in:
+
+- Production-grade **agent systems** (retrievers, planners, controllers).
+- **Data science platforms** automating model requests.
+- **Developer tooling** that wraps LLM payloads in consistent templates.
+- **Enterprise integrations** with guardrails, token budgeting, and analytics hooks.
+
+---
+
+## Next Steps
+
+→ Go to Quickstart to set up the SDK in under 2 minutes\
+→ See Installation for CLI & environment setup\
+→ Read Authentication to configure API keys if required\
+→ Explore the full SDK Reference to dive into each module

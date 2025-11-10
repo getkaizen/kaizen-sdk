@@ -1,59 +1,54 @@
 {
   "navigation": {
-    "languages": [
+    "groups": [
       {
-        "language": "en",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "en/index",
-              "en/quickstart",
-              "en/installation",
-              "en/authentication"
-            ]
-          },
-          {
-            "group": "SDK Reference",
-            "pages": [
-              "en/sdk/prompts_encode",
-              "en/sdk/prompts_decode",
-              "en/sdk/compress",
-              "en/sdk/decompress",
-              "en/sdk/optimize_request"
-            ]
-          },
-          {
-            "group": "Use Cases",
-            "pages": [
-              "en/use-cases/token-budgeting",
-              "en/use-cases/json-payloads",
-              "en/use-cases/replay-debugging",
-              "en/use-cases/agent-payloads"
-            ]
-          },
-          {
-            "group": "Integration Guides",
-            "pages": [
-              "en/integrations/openai",
-              "en/integrations/claude",
-              "en/integrations/gemini",
-              "en/integrations/custom-models"
-            ]
-          },
-          {
-            "group": "API Reference",
-            "pages": [
-              "en/api/openapi",
-              "en/api/errors",
-              "en/api/rate-limits"
-            ]
-          },
-          {
-            "group": "Changelog",
-            "pages": ["en/changelog"]
-          }
+        "group": "Getting started",
+        "pages": [
+          "index",
+          "quickstart",
+          "installation",
+          "authentication"
         ]
+      },
+      {
+        "group": "SDK Reference",
+        "pages": [
+          "sdk/prompts_encode",
+          "sdk/prompts_decode",
+          "sdk/compress",
+          "sdk/decompress",
+          "sdk/optimize_request"
+        ]
+      },
+      {
+        "group": "Use Cases",
+        "pages": [
+          "use-cases/token-budgeting",
+          "use-cases/json-payloads",
+          "use-cases/replay-debugging",
+          "use-cases/agent-payloads"
+        ]
+      },
+      {
+        "group": "Integration Guides",
+        "pages": [
+          "integrations/openai",
+          "integrations/claude",
+          "integrations/gemini",
+          "integrations/custom-models"
+        ]
+      },
+      {
+        "group": "API Reference",
+        "pages": [
+          "api/openapi",
+          "api/errors",
+          "api/rate-limits"
+        ]
+      },
+      {
+        "group": "Changelog",
+        "pages": ["changelog"]
       }
     ]
   }
