@@ -21,34 +21,40 @@
                 "icon": "rocket",
                 "pages": [
                   "index",
+                  "quickstart",
                   "installation",
-                  "quickstart"
+                  "authentication"
                 ]
               },
               {
-                "group": "Core Concepts",
-                "icon": "book",
+                "group": "SDK Reference",
+                "icon": "code",
                 "pages": [
-                  "authentication",
-                  "api-keys",
-                  "rate-limits"
+                  "sdk/kaizen-client",
+                  "sdk/compress",
+                  "sdk/decompress",
+                  "sdk/optimize",
+                  "sdk/optimize-request",
+                  "sdk/optimize-response",
+                  "sdk/prompts-encode",
+                  "sdk/prompts-decode"
                 ]
               },
               {
-                "group": "API Reference",
-                "icon": "server",
+                "group": "Use Cases",
+                "icon": "zap",
                 "pages": [
-                  "endpoints-overview",
-                  "users-api",
-                  "tokens-api"
+                  "use-cases/token-budgeting",
+                  "use-cases/json-payloads",
+                  "use-cases/prompt-debugging",
+                  "use-cases/agent-observability"
                 ]
               },
               {
-                "group": "Advanced",
-                "icon": "gear",
+                "group": "Changelog",
+                "icon": "calendar",
                 "pages": [
-                  "webhooks",
-                  "sdk-integration"
+                  "changelog"
                 ]
               }
             ]
