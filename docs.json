@@ -8,7 +8,12 @@
     "light": "#FFFFFF",
     "dark": "#0D1117"
   },
- 
+   "icons": {
+    "library": "lucide"
+  },
+  "interaction": {
+    "drilldown": false
+  },
   "navigation": {
     "languages": [
       {
