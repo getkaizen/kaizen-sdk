@@ -10,16 +10,6 @@ Compress prompts, reduce latency, and decode large-model responses using the **K
 > Status: The Python SDK is production-ready. JavaScript/TypeScript, Go, and CLI tooling are planned for upcoming releases.\
 > Benchmark Program: Interested in evaluating prompt compression or latency optimization across LLM providers? Contact [**hello@getkaizen.ai**](mailto:hello@getkaizen.ai) to join the testing cohort.
 
----
-
-## Quick Links
-
-- [SDK Reference](docs/sdk_reference.md): Complete field guide and endpoint documentation
-- [Python SDK](python/README.md): Installation, configuration, and customization
-- [Examples](python/examples/README.md): Wrappers for OpenAI, Anthropic, and Gemini
-- [Architecture](docs/ARCHITECTURE.md): High-level design and repository structure
-
-
 ## Why Kaizen?
 
 - Reduce token usage and lower costs through compression of prompts and responses
@@ -29,13 +19,3 @@ Compress prompts, reduce latency, and decode large-model responses using the **K
 - Multi-tenant SaaS and enterprise deployment options available
 
 ---
-
-## How It Works
-
-```mermaid
-flowchart LR
-    A[Your Application] -->|JSON Prompt| B[Kaizen SDK]
-    C -->|Compressed KTOF| D[LLM Provider]
-    D -->|Compressed Response| C
-    B -->|Structured JSON| A
-```
