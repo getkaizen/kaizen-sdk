@@ -2,6 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Kaizen SDK Docs",
   "theme": "almond",
+  "favicon": "/favicon.ico",
   "colors": {
     "primary": "#00C896",
     "light": "#FFFFFF",
@@ -19,7 +20,35 @@
                 "group": "Getting Started",
                 "icon": "rocket",
                 "pages": [
-                  "index"
+                  "index",
+                  "installation",
+                  "quickstart"
+                ]
+              },
+              {
+                "group": "Core Concepts",
+                "icon": "book",
+                "pages": [
+                  "authentication",
+                  "api-keys",
+                  "rate-limits"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "icon": "server",
+                "pages": [
+                  "endpoints-overview",
+                  "users-api",
+                  "tokens-api"
+                ]
+              },
+              {
+                "group": "Advanced",
+                "icon": "gear",
+                "pages": [
+                  "webhooks",
+                  "sdk-integration"
                 ]
               }
             ]
@@ -29,4 +58,3 @@
     ]
   }
 }
-
