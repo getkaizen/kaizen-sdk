@@ -1,6 +1,10 @@
 {
   "name": "Kaizen SDK Docs",
-  "theme": "mint",
+  "colors": {
+    "primary": "#00C896",
+    "light": "#F5F9F8",
+    "dark": "#0D1117"
+  },
   "navigation": {
     "groups": [
       {
