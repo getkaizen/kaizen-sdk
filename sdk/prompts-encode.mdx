@@ -1,5 +1,13 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+title: Prompts Encode
 ---
 
+## `client.prompts_encode(payload)`
+
+Encode prompt payloads (e.g., for agents or tooling) into a compressed token-optimized format.
+
+### Example
+```python
+encoded = await client.prompts_encode({
+    "prompt": "Summarize the following..."
+})
+```

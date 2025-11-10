@@ -1,5 +1,13 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+title: Optimize Request
 ---
 
+## `client.optimize_request(payload)`
+
+Optimize **only the request** portion of a message interaction. Useful before sending to LLM.
+
+### Example
+```python
+optimized = await client.optimize_request({
+    "messages": [...]
+})
+```

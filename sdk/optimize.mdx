@@ -1,5 +1,14 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+title: Optimize
 ---
 
+## `client.optimize(payload)`
+
+Optimizes the full payload (model + messages) by trimming tokens.
+
+### Example
+```python
+optimized = await client.optimize({
+    "model": "gpt-4",
+    "messages": [...]
+})
+```

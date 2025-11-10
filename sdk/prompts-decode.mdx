@@ -1,5 +1,13 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+title: Prompts Decode
 ---
 
+## `client.prompts_decode(payload)`
+
+Decode a previously encoded prompt back to plain text or structured format.
+
+### Example
+```python
+decoded = await client.prompts_decode({
+    "encoded": "..."
+})
+```

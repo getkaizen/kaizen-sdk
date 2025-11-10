@@ -1,5 +1,14 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+
+title: Optimize Response
 ---
 
+## `client.optimize_response(payload)`
+
+Optimize an **LLM-generated response** (for caching, auditing, or reducing token footprint).
+
+### Example
+```python
+optimized = await client.optimize_response({
+    "response": "This is a long generated response..."
+})
+``

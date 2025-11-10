@@ -1,5 +1,14 @@
----
-title: 'New file'
-description: 'Description of your new file.'
+
+title: Decompress
 ---
 
+## `client.decompress(payload)`
+
+Decompress a previously compressed payload back to human-readable format.
+
+### Example
+```python
+decompressed = await client.decompress({
+    "compressed": "..."
+})
+```
