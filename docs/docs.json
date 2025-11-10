@@ -2,36 +2,8 @@
   "navigation": {
     "groups": [
       {
-        "group": "Getting started",
-        "pages": [
-          "index",
-          "quickstart",
-          "installation"
-        ]
-      },
-      {
-        "group": "SDK Reference",
-        "pages": [
-          "sdk/compress",
-          "sdk/decompress",
-          "sdk/encode",
-          "sdk/decode"
-        ]
-      },
-      {
-        "group": "Use Cases",
-        "pages": [
-          "use-cases/token-budgeting",
-          "use-cases/replay-debugging"
-        ]
-      },
-      {
-        "group": "API Reference",
-        "pages": ["api/openapi"]
-      },
-      {
-        "group": "Changelog",
-        "pages": ["changelog"]
+        "group": "Getting Started",
+        "pages": ["index"]
       }
     ]
   }
