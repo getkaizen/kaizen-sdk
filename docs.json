@@ -10,8 +10,8 @@
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
-    "href": "https://mintlify.com/docs"
+    "dark": "/logo/light.svg",
+    "href": "https://docs.getkaizen.io"
   },
   "navigation": {
     "languages": [
