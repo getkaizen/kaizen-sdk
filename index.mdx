@@ -19,23 +19,6 @@ Compress prompts, reduce latency, and decode large-model responses using the **K
 - [Examples](python/examples/README.md): Wrappers for OpenAI, Anthropic, and Gemini
 - [Architecture](docs/ARCHITECTURE.md): High-level design and repository structure
 
----
-
-## Table of Contents
-
- 1. [Why Kaizen?](#why-kaizen)
- 2. [How It Works](#how-it-works)
- 3. [Repository Layout](#repository-layout)
- 4. [Supported Providers](#supported-providers)
- 5. [Getting Started](#getting-started)
- 6. [Environment Targets](#environment-targets)
- 7. [Usage Patterns](#usage-patterns)
- 8. [API Surface Summary](#api-surface-summary)
- 9. [Documentation Map](#documentation-map)
-10. [FAQ](#faq)
-11. [Support](#support)
-
----
 
 ## Why Kaizen?
 
@@ -52,9 +35,7 @@ Compress prompts, reduce latency, and decode large-model responses using the **K
 ```mermaid
 flowchart LR
     A[Your Application] -->|JSON Prompt| B[Kaizen SDK]
-    B -->|/v1/prompts/encode| C[Kaizen API]
     C -->|Compressed KTOF| D[LLM Provider]
     D -->|Compressed Response| C
-    C -->|/v1/prompts/decode| B
     B -->|Structured JSON| A
 ```
