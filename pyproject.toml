@@ -1,0 +1,30 @@
+[project]
+name = "kaizen-client"
+version = "0.1.0"
+description = "Python SDK for Kaizen Token Optimized Format (KTOF) service"
+readme = "README.md"
+authors = [{ name = "Kaizen", email = "engineering@kaizen" }]
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.27.0",
+    "pydantic>=2.6.0",
+]
+
+[project.optional-dependencies]
+gemini = ["google-generativeai>=0.8.0"]
+openai = ["openai>=1.0.0"]
+anthropic = ["anthropic>=0.25.0"]
+all = [
+    "google-generativeai>=0.8.0",
+    "openai>=1.0.0",
+    "anthropic>=0.25.0",
+    "tiktoken>=0.5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/<your-org>/kaizen-python"
+Documentation = "https://github.com/<your-org>/kaizen-python"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
