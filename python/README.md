@@ -150,6 +150,6 @@ When handling failures, catch `KaizenAPIError` for non-2xx responses (inspect `s
 ## References
 
 - [`../README.md`](../README.md) – repository-wide overview and roadmap.
-- [`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md) – structure + guiding principles.
-- [`../docs/sdk_reference.md`](../docs/sdk_reference.md) – exhaustive API contract (a.k.a. “Kaizen SDK Knowledge Transfer”).
+- [`../docs/TODO.md`](../docs/TODO.md) – prioritized backlog and upcoming documentation plans.
+- [`../docs/ISSUE_DRAFTS.md`](../docs/ISSUE_DRAFTS.md) – GitHub issue drafts ready for filing.
 - [`../openapi.json`](../openapi.json) – machine-readable schema for generated clients.

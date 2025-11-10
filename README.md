@@ -1,7 +1,7 @@
 # Kaizen SDKs
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](python/pyproject.toml)
-[![Docs](https://img.shields.io/badge/docs-SDK%20Reference-8A2BE2)](docs/sdk_reference.md)
+[![Docs](https://img.shields.io/badge/docs-Python%20Guide-8A2BE2)](python/README.md)
 [![OpenAPI](https://img.shields.io/badge/spec-openapi.json-orange)](openapi.json)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -13,10 +13,10 @@ Compress prompts, shrink latency, and decode large-model responses using the **K
 
 ## Quick links
 
-- [SDK Reference](docs/sdk_reference.md) – exhaustive endpoint + field guide (“Kaizen SDK Knowledge Transfer”).
 - [Python package](python/README.md) – install, configure, and extend the current SDK.
 - [Examples](python/examples/README.md) – OpenAI, Anthropic, and Gemini wrappers.
-- [Architecture](docs/ARCHITECTURE.md) – repo layout and roadmap.
+- [Docs backlog](docs/TODO.md) – prioritized TODOs plus upcoming documentation work.
+- [Issue drafts](docs/ISSUE_DRAFTS.md) – pre-filled GitHub issues for the engineering backlog.
 
 ## Table of contents
 
@@ -62,7 +62,7 @@ flowchart LR
 | Path | Description |
 | ---- | ----------- |
 | `python/` | Python SDK source, tests, examples, and packaging (`python/README.md`). |
-| `docs/` | Architecture notes, SDK reference, and design records. |
+| `docs/` | Backlog (TODO) and pre-written issue drafts for upcoming work. |
 | `openapi.json` | Canonical Kaizen HTTP schema consumed by every SDK. |
 | `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `LICENSE` | Community policies and license. |
 
@@ -193,7 +193,7 @@ Every encode/optimize route returns:
 - `stats` – original vs optimized lengths, reduction ratio, token deltas (when `token_models` provided).
 - `meta` – auto-detection hints, schemas, and your echoed `metadata` for observability.
 
-See [`docs/sdk_reference.md`](docs/sdk_reference.md) for the full envelope.
+See [`python/README.md`](python/README.md) for detailed payload fields and response envelopes.
 
 ## API surface summary
 
@@ -212,8 +212,8 @@ See [`docs/sdk_reference.md`](docs/sdk_reference.md) for the full envelope.
 
 | Doc | What you’ll find |
 | --- | ---------------- |
-| [`docs/sdk_reference.md`](docs/sdk_reference.md) | Endpoint-by-endpoint contract, payload tables, and implementation nuances. |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Repo structure, guiding principles, roadmap snapshot. |
+| [`docs/TODO.md`](docs/TODO.md) | Backlog of planned features, docs, and prioritization. |
+| [`docs/ISSUE_DRAFTS.md`](docs/ISSUE_DRAFTS.md) | Copy/paste-ready GitHub issues for engineering work. |
 | [`python/README.md`](python/README.md) | Python-specific installation, environment guidance, and helper docs. |
 | [`python/examples/README.md`](python/examples/README.md) | How to run each provider walkthrough with real credentials. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Development workflow, testing expectations, release process. |
