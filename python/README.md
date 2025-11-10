@@ -56,6 +56,24 @@ async def main() -> None:
         print(decoded["result"])
 
 asyncio.run(main())
+
+## Managing the client lifecycle
+
+Many apps only need a Kaizen client for the duration of a single workflow. Use the provided `with_kaizen_client` decorator to ensure the client is created (if missing) and closed automatically:
+
+```python
+from kaizen_client import with_kaizen_client
+
+@with_kaizen_client()
+async def compress_prompt(*, kaizen, messages):
+    encoded = await kaizen.prompts_encode({"prompt": {"messages": messages}})
+    return encoded["result"], encoded["stats"]
+
+# Callers can optionally pass their own KaizenClient:
+# await compress_prompt(messages=msgs, kaizen=my_existing_client)
+```
+
+Behind the scenes the decorator injects a `kaizen` keyword argument, so you can override it in tests or when reusing a long-lived client.
 ```
 
 ## Environment targets
@@ -81,6 +99,20 @@ Rotate API keys regularly and keep them in `.env` or your secret manager—never
 
 All methods accept either fully typed models from `kaizen_client.models` or plain dictionaries. Responses default to raw `dict` objects but can be validated into models by passing `response_model=...` to the private `_post` helper if you fork the client.
 
+### Sample `prompts_encode` response
+
+```json
+{
+  "operation": "prompts.encode",
+  "status": "ok",
+  "result": "KTOF:....",
+  "stats": {"original_bytes": 1024, "compressed_bytes": 312, "reduction_ratio": 0.304},
+  "token_stats": {"gpt-4o-mini": {"original": 210, "compressed": 68}},
+  "metadata": {"example": "full-lifecycle"}
+}
+```
+
+You can pass `token_models` to receive the `token_stats` block or omit it to skip tokenization entirely.
 ## Provider integrations
 
 `kaizen_client.integrations` exposes thin wrappers so you can keep your existing LLM client code and let Kaizen handle payload compression transparently:
@@ -91,6 +123,18 @@ All methods accept either fully typed models from `kaizen_client.models` or plai
 
 Each integration accepts a `KaizenClient` (or config options) plus the vendor client. The decorators/mixins ensure `prompts_encode` is invoked before outbound calls and `prompts_decode` is applied to responses when needed. See the runnable snippets documented in [`examples/README.md`](examples/README.md) for end-to-end usage.
 
+### Provider prerequisites
+
+| Integration | Extra dependency | Environment variables |
+|-------------|------------------|-----------------------|
+| OpenAI | `openai` | `OPENAI_API_KEY`, optional `OPENAI_MODEL` override |
+| Anthropic | `anthropic` | `ANTHROPIC_API_KEY`, optional `ANTHROPIC_MODEL` override |
+| Gemini | `google-generativeai` | `GOOGLE_API_KEY`, optional `GOOGLE_MODEL` override |
+
+`KAIZEN_API_KEY` is still required for every example; the additional keys authenticate with the respective LLM vendor. Configure them via `.env`, your process manager, or cloud secret manager before running the scripts.
+
+> ⚠️ **Current limitation:** the Python wrappers instantiate the vendors' synchronous clients (`OpenAI`, `anthropic.Anthropic`, `google.generativeai.GenerativeModel`) inside async functions. Until the wrappers are refactored to their async equivalents, avoid calling them on a latency-sensitive event loop. Run them in worker threads via `asyncio.to_thread` or dedicate a background task/executor so they do not block other coroutines.
+
 ## Testing & development
 
 ```bash
@@ -100,6 +144,8 @@ pytest
 ```
 
 Key tests live in `tests/test_client.py` and rely on in-memory HTTPX doubles, so the suite runs offline.
+
+When handling failures, catch `KaizenAPIError` for non-2xx responses (inspect `status_code`, `payload`, and `headers`) and `KaizenRequestError` for transport issues (timeouts, DNS, TLS errors).
 
 ## References
 

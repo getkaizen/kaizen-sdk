@@ -118,3 +118,39 @@ async def test_with_kaizen_client_decorator_manages_lifecycle(monkeypatch: pytes
 
     assert result == {"prompt": {"messages": []}}
     assert events == ["created", "used", "closed"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "method,payload,path",
+    [
+        ("compress", {"data": {"foo": "bar"}}, "v1/compress"),
+        ("decompress", {"data": "abc"}, "v1/decompress"),
+        ("optimize", {"data": {"foo": "bar"}}, "v1/optimize"),
+        ("optimize_request", {"prompt": {"messages": []}}, "v1/optimize/request"),
+        ("optimize_response", {"ktof": "abc"}, "v1/optimize/response"),
+    ],
+)
+async def test_all_post_helpers_hit_expected_paths(method: str, payload: dict[str, object], path: str) -> None:
+    dummy = DummyAsyncClient()
+    client = KaizenClient(client=dummy)  # type: ignore[arg-type]
+
+    result = await getattr(client, method)(payload)
+
+    assert result == {"ok": True}
+    assert dummy.last_request is not None
+    assert dummy.last_request["url"] == f"https://api.getkaizen.io/{path}"
+    assert dummy.last_request["json"] is not None
+
+
+@pytest.mark.asyncio
+async def test_health_hits_root_endpoint() -> None:
+    dummy = DummyAsyncClient()
+    client = KaizenClient(client=dummy)  # type: ignore[arg-type]
+
+    await client.health()
+
+    assert dummy.last_request is not None
+    assert dummy.last_request["method"] == "GET"
+    assert dummy.last_request["url"] == "https://api.getkaizen.io/"
+    assert dummy.last_request["json"] is None

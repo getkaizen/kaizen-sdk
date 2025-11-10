@@ -78,6 +78,8 @@ Future SDKs (e.g., `js/`, `go/`, `cli/`) will live alongside `python/` using the
 
 Want another provider? Follow the existing wrappers as templates inside `python/kaizen_client/integrations/`.
 
+> ⚠️ **Heads-up:** these wrappers currently call synchronous vendor SDKs from async methods. Until they migrate to `AsyncOpenAI` / `AsyncAnthropic` / `genai.aio`, run them outside latency-sensitive event loops (e.g., wrap invocations in `asyncio.to_thread`) to avoid blocking other coroutines.
+
 ## Coming soon
 
 - **Kaizen for Voice:** optimized encode/decode flows tailored for speech-to-text pipelines and multimodal voice prompts.
@@ -125,6 +127,20 @@ Follow this repo or reach out to `hello@getkaizen.ai` to join the preview progra
 
 5. **Explore examples** – Use the vendor walkthroughs in [`python/examples/README.md`](python/examples/README.md).
 
+## Examples
+
+Reference implementations live under [`python/examples/`](python/examples). Each script is async-friendly (uses `asyncio.run`) and closes the Kaizen client on exit. The table below mirrors [`python/examples/README.md`](python/examples/README.md); update both whenever you add or rename an example so they stay in sync.
+
+| Script | Highlights | Provider credentials |
+|--------|-----------|----------------------|
+| [`full_lifecycle.py`](python/examples/full_lifecycle.py) | Runs encode → decode → optimize_request/response → compress/decompress → health using only Kaizen. | `KAIZEN_API_KEY` |
+| [`openai_example.py`](python/examples/openai_example.py) | Shows `OpenAIKaizenWrapper` around the Responses API and prints token stats + decoded output. | `KAIZEN_API_KEY`, `OPENAI_API_KEY` |
+| [`anthropic_example.py`](python/examples/anthropic_example.py) | Demonstrates `AnthropicKaizenWrapper` with Claude Sonnet and logs the decoded reply. | `KAIZEN_API_KEY`, `ANTHROPIC_API_KEY` |
+| [`gemini_example.py`](python/examples/gemini_example.py) | Compresses a prompt before sending it to Gemini 2.5 Flash via `GeminiKaizenWrapper`. | `KAIZEN_API_KEY`, `GOOGLE_API_KEY` |
+| [`cost_comparison.py`](python/examples/cost_comparison.py) | Compares raw vs optimized byte/token counts (validated locally with `tiktoken`). | `KAIZEN_API_KEY`, optional `TIKTOKEN_CACHE_DIR` |
+
+Run any script via `python -m examples.<name>` or `python examples/<name>.py` from the `python/` directory after exporting the required environment variables.
+
 ## Environment targets
 
 - **Production (default):** `https://api.getkaizen.io/` – no action required unless you prefer explicit env vars.
@@ -154,6 +170,21 @@ async with KaizenClient() as kaizen:
     response = await wrapper.chat(messages)
     print(response["decoded"]["result"])
 ```
+
+### Lifecycle helper decorator
+
+Wrap ad-hoc workflows with `with_kaizen_client` so each invocation gets a managed client without manual `async with` blocks:
+
+```python
+from kaizen_client import with_kaizen_client
+
+@with_kaizen_client()
+async def run_report(*, kaizen, messages):
+    encoded = await kaizen.prompts_encode({"prompt": {"messages": messages}})
+    return encoded["result"]
+```
+
+See [`python/README.md`](python/README.md#managing-the-client-lifecycle) for the full walkthrough.
 
 ### Stats & metadata
 
