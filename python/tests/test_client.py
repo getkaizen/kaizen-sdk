@@ -56,7 +56,7 @@ async def test_prompts_encode_serializes_models() -> None:
 
     assert result == {"ok": True}
     assert dummy.last_request is not None
-    assert dummy.last_request["url"] == "http://127.0.0.1:8000/v1/prompts/encode"
+    assert dummy.last_request["url"] == "https://api.getkaizen.io/v1/prompts/encode"
     assert dummy.last_request["json"] == {"prompt": {"messages": []}, "auto_detect_json": True}
     assert dummy.last_request["headers"]["Authorization"] == "Bearer secret"
     await client.close()

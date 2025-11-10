@@ -11,6 +11,7 @@ First off, thanks for considering a contribution! This repository unifies every 
 ## Getting Started
 
 ```bash
+cd python
 uv pip install -e .[all]
 pytest
 ```

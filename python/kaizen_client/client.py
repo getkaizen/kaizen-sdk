@@ -19,7 +19,7 @@ from .models import (
     PromptEncodePayload,
 )
 
-DEFAULT_BASE_URL = os.getenv("KAIZEN_BASE_URL", "http://127.0.0.1:8000")
+DEFAULT_BASE_URL = os.getenv("KAIZEN_BASE_URL", "https://api.getkaizen.io/")
 DEFAULT_TIMEOUT = float(os.getenv("KAIZEN_TIMEOUT", "30"))
 DEFAULT_API_KEY = os.getenv("KAIZEN_API_KEY")
 
