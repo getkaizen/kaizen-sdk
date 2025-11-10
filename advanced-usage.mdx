@@ -1,0 +1,31 @@
+# Advanced Usage
+
+Patterns teams commonly reach for once the basics are wired up.
+
+## Webhooks & background jobs
+- Use `with_kaizen_client()` (`python/kaizen_client/decorators.py`) to inject a managed client into webhook handlers or async job runners.
+- Store serialized KTOF payloads in your job queue; decode them with `prompts_decode` as soon as the worker begins processing to minimize memory churn.
+
+## Pagination
+- When batching encode requests, include your own `metadata={"page": n}` inside each payload.
+- On decode, Kaizen echoes the metadata so you can stitch responses back together without guessing which chunk they belong to.
+
+## File uploads
+- Convert large JSON files to Python dictionaries, stream them into `compress`, and persist the returned string alongside a checksum.
+- When uploading to object storage, store both the original file and its KTOF twin; the compressed variant is often 60–80% smaller.
+
+## Streaming & chunking
+- Streaming endpoints are on the roadmap (`docs/TODO.md`). Until native streaming ships, split prompts into manageable sections and call `prompts_encode` per chunk.
+- Use `length_marker` + `delimiter` options (see `EncodeOptions`) to mark chunk boundaries before sending them to a provider that expects streaming tokens.
+
+## Batching
+- Wrap multiple prompts in an array and pass them through `optimize_request` one at a time while reusing the same `KaizenClient`.
+- Plan to add `prompts_encode_batch()` once the API exposes it; for now, fan out with `asyncio.gather()` to run encodes concurrently.
+
+## Custom headers & observability
+- `KaizenClientConfig(default_headers=...)` lets you add `X-Request-ID`, `X-Trace-ID`, or tenant identifiers that flow to Kaizen logs.
+- Pair these headers with your tracing system so you can correlate cost savings with upstream requests.
+
+## Middleware & interceptors
+- If you need to apply custom logic before/after each call, wrap the client methods in your own helper—e.g., a decorator that logs `stats`, retries on 429, or pushes metrics to Prometheus.
+- Keep middleware lightweight; heavy processing should remain in your application layer to avoid slowing Kaizen requests.

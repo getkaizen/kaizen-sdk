@@ -1,21 +1,61 @@
+# `compress`
 
+Convert arbitrary JSON to a compact KTOF string and return size statistics.
 
-## `client.compress(payload)`
+## Parameters
 
-Compress a full JSON payload using the Kaizen optimization engine.
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `Any` | ✅ | JSON-serializable payload (prompts, tool data, structured metadata). |
+| `options.delimiter` | `str` | ❌ | Single-character separator used inside the encoded string. |
+| `options.indent` | `int` | ❌ | Pretty-print indentation applied during decode for readability. |
+| `options.length_marker` | `bool \| str` | ❌ | Include payload length metadata; set to a custom marker string if needed. |
 
-### Parameters
-- `payload` (`EncodeRequest` or `dict`): Input request containing the model, messages, etc.
+Pass the structure either as a plain dict or via `EncodeRequest`.
 
-### Returns
-Compressed dict suitable for upstream usage.
-
-### Example
+## Code example
 ```python
-compressed = await client.compress({
-    "model": "gpt-4",
-    "messages": [{"role": "user", "content": "Hello!"}]
-})
+from kaizen_client import KaizenClient
+
+payload = {
+    "data": {
+        "messages": [
+            {"role": "system", "content": "You are concise."},
+            {"role": "user", "content": "Summarize quarterly metrics."}
+        ],
+        "metadata": {"source": "docs-demo"}
+    },
+    "options": {"indent": 2}
+}
+
+async with KaizenClient.from_env() as client:
+    compressed = await client.compress(payload)
+    print(compressed["result"][:80], "...")
+    print(compressed["stats"])
 ```
 
+## Response example
+```json
+{
+  "operation": "compress",
+  "status": "ok",
+  "result": "KTOF:AAA...",
+  "stats": {
+    "original_bytes": 2048,
+    "compressed_bytes": 612,
+    "reduction_ratio": 0.299
+  },
+  "metadata": {"source": "docs-demo"}
+}
+```
 
+## Errors
+- `400` → Invalid payload (e.g., `data` missing or not JSON-serializable).
+- `401` → Missing/invalid API key.
+- `413` → Payload too large for the current plan.
+
+All non-2xx statuses raise `KaizenAPIError`.
+
+## Notes
+- Use `compress` for raw JSON blobs; prefer `prompts_encode` when your payload follows the chat/messages format.
+- Include `metadata` to correlate stats with downstream requests—Kaizen echoes it back unchanged.

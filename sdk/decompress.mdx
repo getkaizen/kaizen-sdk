@@ -1,12 +1,44 @@
+# `decompress`
 
+Expand a KTOF string back into the original JSON structure.
 
-## `client.decompress(payload)`
+## Parameters
 
-Decompress a previously compressed payload back to human-readable format.
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `str` | ✅ | KTOF string previously returned by `compress`, `optimize`, or `prompts_encode`. |
+| `options.indent` | `int` | ❌ | Apply indentation when reconstructing JSON for readability. |
+| `options.strict` | `bool` | ❌ | Default `True`; set `False` to tolerate unknown markers (useful when debugging legacy payloads). |
 
-### Example
+## Code example
 ```python
-decompressed = await client.decompress({
-    "compressed": "..."
-})
+from kaizen_client import KaizenClient
+
+async def round_trip():
+    async with KaizenClient.from_env() as client:
+        encoded = await client.compress({"data": {"foo": "bar"}})
+        decoded = await client.decompress({"data": encoded["result"]})
+        print(decoded["data"]["foo"])  # => "bar"
+
+import asyncio
+asyncio.run(round_trip())
 ```
+
+## Response example
+```json
+{
+  "operation": "decompress",
+  "status": "ok",
+  "data": {
+    "foo": "bar"
+  }
+}
+```
+
+## Errors
+- `400` → `data` is missing or not a valid KTOF payload.
+- `410` → Referenced payload expired (if you passed a `payload_id` instead of inline data).
+
+## Notes
+- `decompress` mirrors `compress`. Use `prompts_decode` when round-tripping prompt metadata (`messages`, `schemas`, `token_stats`).
+- Keep compressed payloads under your data retention policy—Kaizen does not store them beyond the TTL associated with your account tier.

@@ -1,31 +1,40 @@
+# `KaizenClient`
 
+Core async HTTP client that powers every SDK call.
 
-## `KaizenClient`
+## Configuration
 
-This is the core asynchronous client for the Kaizen SDK.
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `base_url` | `str` | `https://api.getkaizen.io/` | Point to SaaS, staging, or self-hosted deployments. |
+| `api_key` | `str | None` | `KAIZEN_API_KEY` env var | Bearer token sent as `Authorization: Bearer ...`. |
+| `timeout` | `float` | `30.0` | HTTPX request timeout in seconds. |
+| `verify_ssl` | `bool` | `True` | Disable only when using custom CA bundles. |
+| `default_headers` | `dict[str, str]` | `{}` | Inject headers such as `X-Request-ID`. |
 
-### Initialization
+## Usage
 ```python
-from kaizen import KaizenClient
-client = KaizenClient.from_env()
+from kaizen_client import KaizenClient, KaizenClientConfig
+
+config = KaizenClientConfig(
+    api_key="kaizen_xxx",
+    base_url="https://api.getkaizen.io/",
+    timeout=20,
+    default_headers={"X-Request-ID": "docs-demo"}
+)
+
+async with KaizenClient(config) as client:
+    stats = await client.health()
+    print(stats["status"])
 ```
 
-### Configuration
-The client automatically reads environment variables:
-- `KAIZEN_BASE_URL`
-- `KAIZEN_API_KEY`
-- `KAIZEN_TIMEOUT`
+## Lifecycle helpers
 
-You can also pass in a custom config:
-```python
-from kaizen import KaizenClient, KaizenClientConfig
+- `KaizenClient.from_env()` instantiates a client with env-derived config.
+- `with_kaizen_client()` decorator (see `python/kaizen_client/decorators.py`) auto-creates and closes the client for each function invocation.
 
-config = KaizenClientConfig(api_key="sk-123", timeout=60)
-client = KaizenClient(config=config)
-```
+## Notes
 
-### Context Manager Support
-```python
-async with KaizenClient.from_env() as client:
-    ...
-```
+- The client is async; wrap synchronous environments with `asyncio.run()` or convert methods using `asyncio.to_thread`.
+- Close the client (`await client.close()`) when you are done to release sockets if you don’t use the context manager.
+- All high-level methods eventually call `httpx.AsyncClient.request` and raise `KaizenAPIError` on non-2xx responses.

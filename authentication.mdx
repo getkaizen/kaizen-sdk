@@ -1,10 +1,53 @@
+# Authentication
 
-title: Authentication
----
+Kaizen uses a single bearer token for every SDK and HTTP request.
 
-By default, the SDK picks up your API key from `KAIZEN_API_KEY` env variable.
+## API key setup
+- Email [hello@getkaizen.ai](mailto:hello@getkaizen.ai) to receive a production key.
+- Store it in your secret manager or `.env`; never commit keys to source control.
 
-You can also pass it manually:
-```python
-KaizenClientConfig(api_key="sk-123")
+## Environment variables
+```bash
+export KAIZEN_API_KEY="kaizen_xxx"
+export KAIZEN_BASE_URL="https://api.getkaizen.io/"   # optional override
+export KAIZEN_TIMEOUT="30"                           # optional float seconds
 ```
+
+Each provider wrapper also requires its vendor key:
+
+- OpenAI → `OPENAI_API_KEY`
+- Anthropic → `ANTHROPIC_API_KEY`
+- Gemini → `GOOGLE_API_KEY`
+
+## Programmatic configuration
+```python
+from kaizen_client import KaizenClient, KaizenClientConfig
+
+config = KaizenClientConfig(
+    api_key="kaizen_xxx",
+    base_url="https://api.getkaizen.io/",
+    timeout=30,
+    default_headers={"X-Request-ID": "docs-demo"}
+)
+client = KaizenClient(config)
+```
+
+## Successful authentication check
+```python
+import asyncio
+from kaizen_client import KaizenClient
+
+async def main():
+    async with KaizenClient.from_env() as client:
+        response = await client.health()
+        print(response["status"])
+
+asyncio.run(main())
+```
+You should see `ok` (or a similar status) when the API key is valid.
+
+## Common mistakes
+- **Missing env vars** – the examples throw `RuntimeError` if `KAIZEN_API_KEY` or vendor keys are absent.
+- **Wrong base URL** – keep `KAIZEN_BASE_URL` unset unless Kaizen provisioned a dedicated host.
+- **Expired keys** – rotate secrets regularly; requests with revoked keys return `401` and raise `KaizenAPIError`.
+- **Leaking keys in logs** – rely on env vars or secret managers instead of embedding strings in code.

@@ -1,12 +1,44 @@
+# `optimize_response`
 
+Decode a provider reply that was previously compressed with Kaizen, restoring the full JSON payload for downstream processing.
 
-## `client.optimize_response(payload)`
+## Parameters
 
-Optimize an **LLM-generated response** (for caching, auditing, or reducing token footprint).
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ktof` | `str` | ✅ | KTOF response string returned by your provider (e.g., `completion.output_text`). |
+| `options` | `DecodeOptions` | ❌ | Control indentation or strictness during decode. |
 
-### Example
+## Code example
 ```python
-optimized = await client.optimize_response({
-    "response": "This is a long generated response..."
-})
+async with KaizenClient.from_env() as client:
+    optimized_request = await client.optimize_request({"prompt": prompt})
+    provider_response = openai_client.responses.create(
+        model="gpt-4o-mini",
+        input=optimized_request["result"]
+    )
+    decoded = await client.optimize_response({"ktof": provider_response.output_text})
+    print(decoded["result"])
 ```
+
+## Response example
+```json
+{
+  "operation": "optimize.response",
+  "status": "ok",
+  "result": {
+    "messages": [
+      {"role": "assistant", "content": "Here is your decoded reply."}
+    ],
+    "metadata": {"source": "openai.responses"}
+  }
+}
+```
+
+## Errors
+- `400` → `ktof` missing or malformed.
+- `404` → Referenced payload ID expired (if using stored IDs instead of inline strings).
+
+## Notes
+- Use this method together with `optimize_request` when building middleware for provider SDKs.
+- If you only need raw decompression without request/response semantics, use [`decompress`](sdk/decompress).

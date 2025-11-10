@@ -1,0 +1,32 @@
+# `health`
+
+Lightweight liveness probe for your Kaizen deployment.
+
+## Description
+- Sends `GET /` to the configured `base_url`.
+- Useful for readiness checks in containers, CI pipelines, or diagnostics before kicking off workloads.
+
+## Code example
+```python
+async with KaizenClient.from_env() as client:
+    status = await client.health()
+    print(status)
+```
+
+## Response example
+```json
+{
+  "operation": "health",
+  "status": "ok",
+  "uptime": 123456,
+  "region": "us-east-1"
+}
+```
+
+## Errors
+- `401` → API key missing or invalid.
+- `503` → Deployment temporarily unavailable; retry with backoff.
+
+## Notes
+- The exact payload fields (`uptime`, `region`, etc.) may vary by deployment. Treat anything beyond `status` as informational.
+- Health checks bypass compression logic, so they’re safe to call from cold-start scripts before setting up workloads.

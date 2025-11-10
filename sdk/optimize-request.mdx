@@ -1,11 +1,57 @@
+# `optimize_request`
 
-## `client.optimize_request(payload)`
+Compress an outbound provider payload (messages, tools, multimodal content) and collect stats before you hit the vendor API.
 
-Optimize **only the request** portion of a message interaction. Useful before sending to LLM.
+## Parameters
 
-### Example
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `prompt` | `Any` | ✅ | Provider-ready payload (`messages`, `input`, `tools`, etc.). |
+| `options` | `EncodeOptions` | ❌ | Same knobs as `compress`. |
+| `auto_detect_json` | `bool` | ❌ (default `True`) | Automatically find JSON snippets nested inside strings. |
+| `metadata` | `dict[str, Any]` | ❌ | User-defined context echoed in responses. |
+| `token_models` | `list[str]` | ❌ | Request token stats for specific models. |
+
+## Code example
 ```python
-optimized = await client.optimize_request({
-    "messages": [...]
-})
+payload = {
+    "prompt": {
+        "messages": [
+            {"role": "system", "content": "You are precise."},
+            {"role": "user", "content": "Summarize this invoice", "metadata": {"invoice_id": "inv_42"}}
+        ],
+        "tools": [{"name": "format_json", "definition": {...}}]
+    },
+    "token_models": ["gpt-4o-mini"]
+}
+
+async with KaizenClient.from_env() as client:
+    optimized = await client.optimize_request(payload)
+    ktof_prompt = optimized["result"]
+    stats = optimized["stats"]
 ```
+
+## Response example
+```json
+{
+  "operation": "optimize.request",
+  "status": "ok",
+  "result": "KTOF:...",
+  "stats": {
+    "original_bytes": 8192,
+    "compressed_bytes": 2112,
+    "reduction_ratio": 0.258
+  },
+  "token_stats": {
+    "gpt-4o-mini": {"original": 980, "compressed": 276}
+  }
+}
+```
+
+## Errors
+- `400` → `prompt` missing/empty, or contains unsupported field types.
+- `422` → Auto-detection failed to parse embedded JSON; disable `auto_detect_json` if your payload already uses strict types.
+
+## Notes
+- Feed `result` directly into your provider client (OpenAI Responses, Anthropic Messages, Gemini `generate_content`, etc.).
+- For the matching decode step after the provider responds, use [`optimize_response`](sdk/optimize-response).

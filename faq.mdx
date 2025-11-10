@@ -1,0 +1,27 @@
+# FAQ
+
+Answers to the most common questions from developers integrating Kaizen.
+
+## Do I need a different SDK per provider?
+No. Kaizen encodes/decodes prompts generically, then you pass the compressed string to any provider. Optional wrappers exist for OpenAI, Anthropic, and Gemini so you can keep their SDK interfaces.
+
+## Which languages are officially supported?
+Python (async client) is production-ready. REST/OpenAPI is always available, and JavaScript/TypeScript, Go, Java, plus CLI tooling are on the roadmap—follow the repo or email `hello@getkaizen.ai` for preview access.
+
+## Where should I run Kaizen?
+Use the hosted API at `https://api.getkaizen.io/` by default. Enterprise customers can request dedicated, self-hosted, or air-gapped deployments—contact sales for the FastAPI package.
+
+## How do I keep clients warm in serverless environments?
+Create the client in a module-level variable and reuse it across invocations. If the platform tears down the runtime, rebuild it on demand with `KaizenClient.from_env()`; each instantiation is lightweight.
+
+## Can I send arbitrary binary data?
+KTOF is optimized for JSON/chat payloads. Convert binaries to base64 (or upload to storage) and reference them inside your prompt metadata before calling `prompts_encode`.
+
+## How do I monitor savings?
+Every response returns a `stats` block with `original_bytes`, `compressed_bytes`, and `reduction_ratio`, plus optional `token_stats`. Log these fields with your trace ID to build dashboards on throughput and cost savings.
+
+## What happens if the API is unreachable?
+`KaizenRequestError` is raised. Catch it, retry with exponential backoff, and alert if the failure persists. The client never swallows errors, so you can rely on your existing incident tooling.
+
+## How often does the SDK change?
+Breaking changes bump the minor version (e.g., `0.2.x`). Track updates in the [Changelog](changelog) and configure Dependabot or Renovate to keep your dependency fresh.

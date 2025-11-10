@@ -1,16 +1,35 @@
-# Kaizen SDKs
+# Kaizen SDK overview
 
-Compress prompts, reduce latency, and decode large-model responses using the **Kaizen Token Optimized Format (KTOF)**. This repository hosts the official Kaizen clients—starting with Python—plus documentation, schemas, and usage examples.
+Compress prompts, shrink latency, and decode large-model responses with the **Kaizen Token Optimized Format (KTOF)**—a lightweight layer that sits between your app and any LLM provider.
 
-> Status: The Python SDK is production-ready. JavaScript/TypeScript, Go, and CLI tooling are planned for upcoming releases.\
-> Benchmark Program: Interested in evaluating prompt compression or latency optimization across LLM providers? Contact [**hello@getkaizen.ai**](mailto:hello@getkaizen.ai) to join the testing cohort.
+> **One sentence promise** · Kaizen detects structured data inside prompts, compresses it, and restores it losslessly so you spend fewer tokens without changing the way you build.
 
-## Why Kaizen?
+## Key capabilities
 
-- Reduce token usage and lower costs through compression of prompts and responses
-- Consistent API surface across languages with OpenAPI-based SDKs
-- Seamless wrappers for OpenAI, Anthropic, Gemini, and other LLM providers
-- Transparent observability: track compression ratios, token savings, and metadata
-- Multi-tenant SaaS and enterprise deployment options available
+- **Prompt compression** – `compress`, `optimize`, and `prompts_encode` routes turn large JSON/chat payloads into compact KTOF strings with byte + token stats.
+- **Response hydration** – `decompress`, `prompts_decode`, and `optimize_response` rebuild the original structure—including metadata—for safer downstream handling.
+- **Provider adapters** – Thin wrappers for OpenAI, Anthropic, and Gemini keep your existing SDK code while adding transparent encode/decode hooks.
+- **Observability hooks** – Every response returns `stats`, optional `token_stats`, and echoes your metadata so you can track savings per request or workflow.
+- **Enterprise-ready deployment** – Default SaaS endpoint (`https://api.getkaizen.io/`) plus dedicated, self-hosted, or air‑gapped options on request.
 
----
+## Supported platforms
+
+- **Python** (`kaizen-client` ≥ 0.1.0) – fully typed async client used throughout this guide.
+- **REST/OpenAPI** – `openapi.json` ships with the repo for custom client generation.
+- **Coming soon** – JavaScript/TypeScript, Go, Java, and CLI tooling follow the same schema; join the preview at [hello@getkaizen.ai](mailto:hello@getkaizen.ai).
+
+## Versioning & support
+
+- Current SDK release: **v0.1.0** (`python/pyproject.toml`), targeting Python 3.10+.
+- Kaizen API is versioned at `/v1/...`—backwards-compatible changes are additive; breaking changes trigger a new SDK minor version with migration notes.
+- Report issues via GitHub or email `engineering@getkaizen.com`. Enterprise customers receive dedicated support channels.
+
+## Typical workflow
+
+1. **Install & configure** – `pip install kaizen-client[all]`, export `KAIZEN_API_KEY`, and optionally configure extras for OpenAI/Anthropic/Gemini.
+2. **Encode before provider calls** – run `client.prompts_encode()` or `client.optimize_request()` to generate a compressed payload plus stats.
+3. **Send to any LLM** – pass the returned `result` string to your provider SDK (or wrapper) like a normal prompt.
+4. **Decode responses** – hand `completion.output_text` (or equivalent) to `client.prompts_decode()` / `client.optimize_response()` to recover structured JSON.
+5. **Track savings** – log the byte/token deltas from the `stats` block, and forward them to observability tools for cost tracking.
+
+Head to **Installation** next if you want the exact commands, or skip to **Quick Start** for a runnable script.

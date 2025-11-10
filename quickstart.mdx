@@ -1,13 +1,34 @@
+# Quick Start
 
-## 3 steps to integrate
+Fastest path to a working encode → decode round-trip.
 
+## 1. Install & set secrets
 ```bash
-pip install kaizen-sdk
+pip install kaizen-client[all]
+export KAIZEN_API_KEY="kaizen_xxx"
 ```
 
+## 2. Initialize the client
 ```python
-from kaizen import KaizenClient
+from kaizen_client import KaizenClient
 client = KaizenClient.from_env()
-
-compressed = await client.compress({...})
 ```
+
+## 3. Call the API
+```python
+import asyncio
+
+async def main():
+    async with KaizenClient.from_env() as client:
+        encoded = await client.prompts_encode({
+            "prompt": {"messages": [{"role": "user", "content": "Compress me"}]},
+            "token_models": ["gpt-4o-mini"]
+        })
+        decoded = await client.prompts_decode({"ktof": encoded["result"]})
+        print("Reduction:", encoded["stats"]["reduction_ratio"])
+        print("Decoded:", decoded["result"]["messages"][0]["content"])
+
+asyncio.run(main())
+```
+
+You now have a compressed prompt, a decoded response, and the savings printed to stdout—all in under a minute.
