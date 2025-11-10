@@ -1,12 +1,32 @@
 {
+  "$schema": "https://mintlify.com/docs.json",
   "name": "Kaizen SDK Docs",
-  "theme": "mint",
+  "theme": "almond",
+  "colors": {
+    "primary": "#00C896",
+    "light": "#FFFFFF",
+    "dark": "#0D1117"
+  },
   "navigation": {
-    "groups": [
+    "languages": [
       {
-        "group": "Getting Started",
-        "pages": ["index"]
+        "language": "en",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "icon": "rocket",
+                "pages": [
+                  "index"
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }
 }
+
