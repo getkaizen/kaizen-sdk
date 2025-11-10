@@ -1,0 +1,60 @@
+{
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "en/index",
+              "en/quickstart",
+              "en/installation",
+              "en/authentication"
+            ]
+          },
+          {
+            "group": "SDK Reference",
+            "pages": [
+              "en/sdk/prompts_encode",
+              "en/sdk/prompts_decode",
+              "en/sdk/compress",
+              "en/sdk/decompress",
+              "en/sdk/optimize_request"
+            ]
+          },
+          {
+            "group": "Use Cases",
+            "pages": [
+              "en/use-cases/token-budgeting",
+              "en/use-cases/json-payloads",
+              "en/use-cases/replay-debugging",
+              "en/use-cases/agent-payloads"
+            ]
+          },
+          {
+            "group": "Integration Guides",
+            "pages": [
+              "en/integrations/openai",
+              "en/integrations/claude",
+              "en/integrations/gemini",
+              "en/integrations/custom-models"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "en/api/openapi",
+              "en/api/errors",
+              "en/api/rate-limits"
+            ]
+          },
+          {
+            "group": "Changelog",
+            "pages": ["en/changelog"]
+          }
+        ]
+      }
+    ]
+  }
+}
