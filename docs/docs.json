@@ -1,10 +1,17 @@
 {
-  "navigation": {
-    "groups": [
-      {
-        "group": "Getting Started",
-        "pages": ["index"]
-      }
-    ]
+  "name": "Your Project Name",
+  "theme": "mint",
+  {
+    "navigation": {
+      "groups": [
+        {
+          "group": "Getting Started",
+          "pages": ["index"]
+        }
+      ]
+    }
   }
 }
+
+
+
