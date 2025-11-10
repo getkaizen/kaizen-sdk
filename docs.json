@@ -19,13 +19,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:hello@getkaizen.io"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://getkaizen.io"
     }
   },
   "navigation": {
@@ -82,5 +82,12 @@
         ]
       }
     ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/mintlify",
+      "github": "https://github.com/getkaizen",
+      "linkedin": "https://linkedin.com/company/mintlify"
+    }
   }
 }
