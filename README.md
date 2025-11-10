@@ -8,6 +8,8 @@
 Compress prompts, shrink latency, and decode large-model responses using the **Kaizen Token Optimized Format (KTOF)**. This repository hosts every official Kaizen client, starting with the Python SDK plus shared docs, schemas, and examples.
 
 > **Status:** Python SDK is production-ready. JavaScript/TypeScript, Go, and CLI tooling are next up.
+>
+> 💬 **Benchmark Cohort:** We’re inviting contributors to run Kaizen prompt-compression evals (token savings + latency benchmarks) across providers. Interested? Email **hello@getkaizen.ai** with your use case and we’ll loop you in.
 
 ## Quick links
 
@@ -36,7 +38,7 @@ Compress prompts, shrink latency, and decode large-model responses using the **K
 - **Consistent ergonomics:** Every SDK mirrors the same OpenAPI schema, so you can swap languages or hosts without relearning the API.
 - **Provider-ready helpers:** Drop-in decorators/wrappers automatically encode outbound prompts and decode responses for OpenAI, Anthropic, and Gemini.
 - **Observability built in:** Every encode/optimize route returns stats (length deltas, token counts, metadata) so you can quantify savings.
-- **Security conscious:** API keys flow through environment variables and bearer headers; no keys land in source control by default.
+- **Security & enterprise ready:** Multi-tenant SaaS by default, with dedicated or air-gapped deployments available on request (`hello@getkaizen.ai`).
 
 ## How it works
 
@@ -76,6 +78,13 @@ Future SDKs (e.g., `js/`, `go/`, `cli/`) will live alongside `python/` using the
 
 Want another provider? Follow the existing wrappers as templates inside `python/kaizen_client/integrations/`.
 
+## Coming soon
+
+- **Kaizen for Voice:** optimized encode/decode flows tailored for speech-to-text pipelines and multimodal voice prompts.
+- **Kaizen for Documents / OCR:** document-ingestion helpers that compress scanned/OCR outputs while preserving layout metadata for downstream LLMs.
+
+Follow this repo or reach out to `hello@getkaizen.ai` to join the preview programs.
+
 ## Getting started
 
 1. **Clone & install**
@@ -92,7 +101,7 @@ Want another provider? Follow the existing wrappers as templates inside `python/
     ```bash
     export KAIZEN_API_KEY="kaizen_xxx"            # request via hello@getkaizen.ai
     export KAIZEN_TIMEOUT="30"                   # optional override
-    export KAIZEN_BASE_URL="https://api.getkaizen.io/"  # override only if using staging/local
+    export KAIZEN_BASE_URL="https://api.getkaizen.io/"  # override only if using an enterprise/self-hosted deployment
     ```
 
     > Tip: store secrets in a gitignored `.env` or secret manager. CI pipelines can inject them at runtime.
@@ -119,8 +128,8 @@ Want another provider? Follow the existing wrappers as templates inside `python/
 ## Environment targets
 
 - **Production (default):** `https://api.getkaizen.io/` – no action required unless you prefer explicit env vars.
-- **Staging/Internal:** point `KAIZEN_BASE_URL` at your internal host (e.g., `https://internal.getkaizen.ai`).
-- **Local development:** run the Kaizen service locally and set `KAIZEN_BASE_URL=http://127.0.0.1:8000`. Keep `KAIZEN_TIMEOUT` modest (≈30s) to surface connectivity issues quickly.
+- **Staging/Internal (managed by Kaizen):** if we provision a dedicated host for your org, set `KAIZEN_BASE_URL` to that URL.
+- **Self-hosted / air-gapped (Enterprise tier):** reach out to `hello@getkaizen.ai` to discuss the FastAPI package and deployment playbook before pointing `KAIZEN_BASE_URL` at your environment.
 
 ## Usage patterns
 
@@ -184,7 +193,7 @@ See [`docs/sdk_reference.md`](docs/sdk_reference.md) for the full envelope.
 
 **How do I request an API key?** – Email `hello@getkaizen.ai`. Keys are passed via `KAIZEN_API_KEY` or `KaizenClientConfig(api_key=...)`.
 
-**Can I run Kaizen locally?** – Yes. Point `KAIZEN_BASE_URL` at your local FastAPI host (default `http://127.0.0.1:8000`). The SDK will use that base URL automatically.
+**Can I run Kaizen locally?** – Self-hosted/Air-gapped deployments are available for enterprise customers. Email `hello@getkaizen.ai` to discuss the FastAPI package and deployment checklist; we will share the image and support plan before you repoint `KAIZEN_BASE_URL`.
 
 **Where do stats/token numbers come from?** – The backend normalizes JSON, computes byte diffs, and (optionally) runs token counts per model. SDKs simply relay those numbers.
 

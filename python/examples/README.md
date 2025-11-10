@@ -4,7 +4,7 @@ Each script assumes you have installed the SDK extras (`uv pip install -e .[all]
 
 ```bash
 export KAIZEN_API_KEY="kaizen_xxx"
-# optional: override only if you are targeting staging/local instead of the hosted API
+# optional: override only if Kaizen provisions a dedicated/enterprise host for you
 export KAIZEN_BASE_URL="https://api.getkaizen.io/"
 ```
 

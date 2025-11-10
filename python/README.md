@@ -6,7 +6,7 @@ Typed async client, provider adapters, and helpers for working with the Kaizen T
 
 1. **Request access** – Email `hello@getkaizen.ai` for a production API key.
 2. **Environment variables** – Export the following (or pass via `KaizenClientConfig`):
-   - `KAIZEN_BASE_URL` – defaults to `https://api.getkaizen.io/`; point it at staging/local (e.g., `http://127.0.0.1:8000`) only when needed.
+   - `KAIZEN_BASE_URL` – defaults to `https://api.getkaizen.io/`; override only when Kaizen provisions a dedicated host for you or you have an approved self-hosted deployment.
    - `KAIZEN_API_KEY` – bearer token used by the SDK.
    - `KAIZEN_TIMEOUT` – float seconds, default `30`.
 
@@ -61,8 +61,8 @@ asyncio.run(main())
 ## Environment targets
 
 - **Production (default):** `https://api.getkaizen.io/`.
-- **Staging/Internal:** set `KAIZEN_BASE_URL` to your internal host (e.g., `https://internal.getkaizen.ai`).
-- **Local dev:** `KAIZEN_BASE_URL=http://127.0.0.1:8000` pairs nicely with a locally running Kaizen service.
+- **Managed staging/internal:** if Kaizen hosts a dedicated env for you, set `KAIZEN_BASE_URL` to that URL.
+- **Self-hosted / air-gapped (Enterprise tier):** contact `hello@getkaizen.ai` to obtain the FastAPI build + deployment checklist before pointing `KAIZEN_BASE_URL` at your infrastructure.
 
 Rotate API keys regularly and keep them in `.env` or your secret manager—never commit them to source control.
 
