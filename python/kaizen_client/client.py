@@ -167,10 +167,7 @@ class KaizenClient:
         if self._config.api_key:
             # Use the API key directly in x-api-key header (this works for compression)
             headers["x-api-key"] = self._config.api_key
-            
-            # Also try Authorization header for endpoints that might need it
-            headers["Authorization"] = f"Bearer {self._config.api_key}"
-            
+
         return headers
 
     def _resolve_path(self, path: str) -> str:
