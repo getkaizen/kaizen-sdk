@@ -17,7 +17,7 @@ Typed async client, provider adapters, and helpers for working with the Kaizen T
 
 ```bash
 cd python
-uv pip install -e .[all]   # or: pip install -e .[all]
+uv pip install kaizen-client
 ```
 
 Optional extras enable provider adapters:
@@ -56,21 +56,6 @@ async def main() -> None:
         print(decoded["result"])
 
 asyncio.run(main())
-
-## Managing the client lifecycle
-
-Many apps only need a Kaizen client for the duration of a single workflow. Use the provided `with_kaizen_client` decorator to ensure the client is created (if missing) and closed automatically:
-
-```python
-from kaizen_client import with_kaizen_client
-
-@with_kaizen_client()
-async def compress_prompt(*, kaizen, messages):
-    encoded = await kaizen.prompts_encode({"prompt": {"messages": messages}})
-    return encoded["result"], encoded["stats"]
-
-# Callers can optionally pass their own KaizenClient:
-# await compress_prompt(messages=msgs, kaizen=my_existing_client)
 ```
 
 Behind the scenes the decorator injects a `kaizen` keyword argument, so you can override it in tests or when reusing a long-lived client.
@@ -146,10 +131,3 @@ pytest
 Key tests live in `tests/test_client.py` and rely on in-memory HTTPX doubles, so the suite runs offline.
 
 When handling failures, catch `KaizenAPIError` for non-2xx responses (inspect `status_code`, `payload`, and `headers`) and `KaizenRequestError` for transport issues (timeouts, DNS, TLS errors).
-
-## References
-
-- [`../README.md`](../README.md) – repository-wide overview and roadmap.
-- [`../docs/TODO.md`](../docs/TODO.md) – prioritized backlog and upcoming documentation plans.
-- [`../docs/ISSUE_DRAFTS.md`](../docs/ISSUE_DRAFTS.md) – GitHub issue drafts ready for filing.
-- [`../openapi.json`](../openapi.json) – machine-readable schema for generated clients.
