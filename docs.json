@@ -112,6 +112,13 @@
                 ]
               },
               {
+                "group": "Case Study",
+                "icon": "sparkles",
+                "pages": [
+                  "casestudy"
+                ]
+              },
+              {
                 "group": "Error Reference",
                 "icon": "alert-triangle",
                 "pages": [
