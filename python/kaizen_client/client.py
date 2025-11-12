@@ -163,6 +163,7 @@ class KaizenClient:
         """Override to fix authorization header format"""
         headers = dict(self._config.default_headers)
         headers.setdefault("Content-Type", "application/json")
+        headers.setdefault("Accept", "application/json") 
         
         if self._config.api_key:
             # Use the API key directly in x-api-key header (this works for compression)

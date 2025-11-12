@@ -231,7 +231,6 @@ See [`python/README.md`](python/README.md) for detailed payload fields and respo
 ## Support
 
 - **Issues & feature requests:** open a ticket in this repo and include reproduction steps or desired behavior.
-- **Security reports:** email `security@getkaizen.ai` instead of filing a public issue.
 - **General questions:** reach the engineering team at `hello@getkaizen.ai`.
 
 PRs are welcome—see [`CONTRIBUTING.md`](CONTRIBUTING.md) and keep tests/docs alongside code changes.
