@@ -6,6 +6,8 @@ When one of our enterprise customers asked us to process an unusually large and 
 
 Our stack relied heavily on structured JSON for document extraction because switching to YAML or other compact formats would break compatibility with our downstream systems. The token usage was high due to whitespace, repeated keys, and verbose nested structures. While this might seem trivial, the costs compound fast when you are parsing thousands of documents in an automated workflow.
 
+![case-study001.png](/images/case-study001.png)
+
 ## The Breakthrough: Token Optimization Without Structural Change
 
 We knew that prompt optimization could yield real savings if done safely. The challenge was preserving 100% correctness while trimming redundant data. So, we built a lightweight internal library called **Kaizen**  a token optimization layer designed to make JSON leaner and smarter.
@@ -25,6 +27,8 @@ Kaizen uses a deterministic encoder-decoder pipeline. Every payload passes throu
 
 ## Results
 
+![case-study002.png](/images/case-study002.png)
+
 When benchmarked on our customer’s dataset, Kaizen achieved:
 
 - 50–60% reduction in token usage, depending on document complexity.
@@ -33,6 +37,8 @@ When benchmarked on our customer’s dataset, Kaizen achieved:
 - 100% field accuracy, validated against our extraction engine.
 
 Below is a sample visualization of the result:
+
+![case-study003.png](/images/case-study003.png)
 
 ## From Internal Tool to Developer Library
 
