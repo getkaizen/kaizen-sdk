@@ -160,10 +160,17 @@ class KaizenClient:
         return dict(payload)
 
     def _build_headers(self) -> Dict[str, str]:
+        """Override to fix authorization header format"""
         headers = dict(self._config.default_headers)
         headers.setdefault("Content-Type", "application/json")
+        
         if self._config.api_key:
-            headers["x-api-key"] = f"Bearer {self._config.api_key}"
+            # Use the API key directly in x-api-key header (this works for compression)
+            headers["x-api-key"] = self._config.api_key
+            
+            # Also try Authorization header for endpoints that might need it
+            headers["Authorization"] = f"Bearer {self._config.api_key}"
+            
         return headers
 
     def _resolve_path(self, path: str) -> str:
