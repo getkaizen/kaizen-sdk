@@ -1,0 +1,47 @@
+# `prompts_decode`
+
+Hydrate a previously encoded prompt (inline `ktof` string or stored payload ID) into structured JSON.
+
+## Parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `ktof` | `str` | ✅ | Encoded payload returned by `prompts_encode`/`optimize_request` (or a payload ID supported by your account tier). |
+| `options` | `DecodeOptions` | ❌ | Toggle indentation or strict mode. |
+| `replay_meta` | `dict[str, Any]` | ❌ | Supplementary data for audit logs when replaying historical prompts. |
+| `metadata` | `dict[str, Any]` | ❌ | Additional context to attach to the decoded response (merged with stored metadata). |
+
+## Code example
+```python
+encoded = await client.prompts_encode({"prompt": {"messages": [{"role": "user", "content": "Hi"}]}})
+
+decoded = await client.prompts_decode({
+    "ktof": encoded["result"],
+    "metadata": {"decoded_by": "docs-demo"}
+})
+
+print(decoded["result"]["messages"][0]["content"])
+```
+
+## Response example
+```json
+{
+  "operation": "prompts.decode",
+  "status": "ok",
+  "result": {
+    "messages": [
+      {"role": "user", "content": "Hi"}
+    ],
+    "metadata": {"workflow": "support-reply"}
+  },
+  "metadata": {"decoded_by": "docs-demo"}
+}
+```
+
+## Errors
+- `404` → Payload expired or ID not found—ensure you decode before TTL expiry.
+- `410` → Attempted to replay a payload whose retention window has passed.
+
+## Notes
+- `prompts_decode` keeps your original metadata intact. Merge in new metadata sparingly to avoid overwriting audit fields.
+- Use this method in tandem with `prompts_encode` anytime you store compressed prompts (databases, queues, caches).

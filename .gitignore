@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+.env/
+.envrc
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# macOS / system
+.DS_Store
+
+# Logs
+*.log
+
+# Local tooling caches
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# Kaizen-specific
+python/.pytest_cache/

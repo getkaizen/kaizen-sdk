@@ -1,0 +1,59 @@
+# `prompts_encode`
+
+Purpose-built encoder for chat-style prompts. It detects nested JSON, schemas, and metadata automatically.
+
+## Parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `prompt` | `Any` | ✅ | Chat payload (`messages`, `tools`, `metadata`, etc.). |
+| `options` | `EncodeOptions` | ❌ | Same tuning knobs as `compress`. |
+| `auto_detect_json` | `bool` | ❌ (default `True`) | Detect JSON fragments embedded inside strings. |
+| `schemas` | `dict[str, Any]` | ❌ | Supply JSON Schemas to help Kaizen segment structured fields. |
+| `metadata` | `dict[str, Any]` | ❌ | Arbitrary observability data echoed in responses. |
+| `token_models` | `list[str]` | ❌ | Request model-specific token stats. |
+
+## Code example
+```python
+prompt = {
+    "messages": [
+        {"role": "system", "content": "You compress things"},
+        {"role": "user", "content": "Summarize the following JSON", "metadata": {"doc_id": "abc"}}
+    ],
+    "metadata": {"workflow": "support-reply"}
+}
+
+async with KaizenClient.from_env() as client:
+    encoded = await client.prompts_encode({
+        "prompt": prompt,
+        "token_models": ["gpt-4o-mini"]
+    })
+    ktof_prompt = encoded["result"]
+    stats = encoded["stats"]
+```
+
+## Response example
+```json
+{
+  "operation": "prompts.encode",
+  "status": "ok",
+  "result": "KTOF:...",
+  "stats": {
+    "original_bytes": 4096,
+    "compressed_bytes": 1024,
+    "reduction_ratio": 0.25
+  },
+  "token_stats": {
+    "gpt-4o-mini": {"original": 520, "compressed": 148}
+  },
+  "metadata": {"workflow": "support-reply"}
+}
+```
+
+## Errors
+- `400` → `prompt` missing or contains unsupported types.
+- `422` → Auto-detection failed to parse a JSON fragment (disable `auto_detect_json` as a fallback).
+
+## Notes
+- Use this method for every provider wrapper; the returned `result` is what you send upstream.
+- Store `metadata` (e.g., customer IDs, workflow names) to correlate savings or replay prompts for auditing.

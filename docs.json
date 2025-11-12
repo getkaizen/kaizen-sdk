@@ -2,10 +2,31 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Kaizen SDK Docs",
   "theme": "almond",
+  "favicon": "/favicon.ico",
   "colors": {
     "primary": "#00C896",
     "light": "#FFFFFF",
     "dark": "#0D1117"
+  },
+   "icons": {
+    "library": "lucide"
+  },
+  "poweredBy": false,
+  "interaction": {
+    "drilldown": false
+  },
+   "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:hello@getkaizen.io"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://getkaizen.io"
+    }
   },
   "navigation": {
     "languages": [
@@ -16,10 +37,99 @@
             "tab": "Documentation",
             "groups": [
               {
-                "group": "Getting Started",
+                "group": "Overview",
                 "icon": "rocket",
                 "pages": [
                   "index"
+                ]
+              },
+              {
+                "group": "Installation",
+                "icon": "download",
+                "pages": [
+                  "installation"
+                ]
+              },
+              {
+                "group": "Authentication",
+                "icon": "key",
+                "pages": [
+                  "authentication"
+                ]
+              },
+              {
+                "group": "Quick Start",
+                "icon": "zap",
+                "pages": [
+                  "quickstart"
+                ]
+              },
+              {
+                "group": "Core Concepts",
+                "icon": "layers",
+                "pages": [
+                  "core-concepts"
+                ]
+              },
+              {
+                "group": "API Methods",
+                "icon": "code",
+                "pages": [
+                  "api-methods",
+                  "sdk/kaizen-client",
+                  "sdk/compress",
+                  "sdk/decompress",
+                  "sdk/optimize",
+                  "sdk/optimize-request",
+                  "sdk/optimize-response",
+                  "sdk/prompts-encode",
+                  "sdk/prompts-decode",
+                  "sdk/health"
+                ]
+              },
+              {
+                "group": "Advanced Usage",
+                "icon": "settings",
+                "pages": [
+                  "advanced-usage"
+                ]
+              },
+              {
+                "group": "Recipes",
+                "icon": "book-open",
+                "pages": [
+                  "recipes"
+                ]
+              },
+              {
+                "group": "Use Cases",
+                "icon": "sparkles",
+                "pages": [
+                  "use-cases/token-budgeting",
+                  "use-cases/json-payloads",
+                  "use-cases/prompt-debugging",
+                  "use-cases/agent-observability"
+                ]
+              },
+              {
+                "group": "Error Reference",
+                "icon": "alert-triangle",
+                "pages": [
+                  "error-reference"
+                ]
+              },
+              {
+                "group": "Changelog",
+                "icon": "calendar",
+                "pages": [
+                  "changelog"
+                ]
+              },
+              {
+                "group": "FAQ",
+                "icon": "help-circle",
+                "pages": [
+                  "faq"
                 ]
               }
             ]
@@ -27,6 +137,12 @@
         ]
       }
     ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/kaizenai_dev",
+      "github": "https://github.com/getkaizen",
+      "linkedin": "https://www.linkedin.com/company/get-kaizen-ai"
+    }
   }
 }
-

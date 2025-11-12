@@ -1,0 +1,55 @@
+# `optimize`
+
+Run compression and token estimation in a single call. Ideal when you need byte savings plus model-specific token counts.
+
+## Parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `Any` | ✅ | JSON payload to compress. |
+| `options` | `EncodeOptions` | ❌ | Same knobs as `compress` (`indent`, `delimiter`, `length_marker`). |
+| `token_models` | `list[str]` | ❌ | Model IDs (e.g., `["gpt-4o-mini", "claude-3-5-sonnet-20240620"]`) for token stats. |
+
+## Code example
+```python
+payload = {
+    "data": {
+        "messages": [
+            {"role": "user", "content": "Audit this JSON blob"},
+        ],
+        "metadata": {"team": "ops"},
+    },
+    "token_models": ["gpt-4o-mini", "claude-3-5-sonnet-20240620"]
+}
+
+async with KaizenClient.from_env() as client:
+    optimized = await client.optimize(payload)
+    print(optimized["stats"])
+    print(optimized["token_stats"]["gpt-4o-mini"])
+```
+
+## Response example
+```json
+{
+  "operation": "optimize",
+  "status": "ok",
+  "result": "KTOF:...",
+  "stats": {
+    "original_bytes": 5120,
+    "compressed_bytes": 1184,
+    "reduction_ratio": 0.231
+  },
+  "token_stats": {
+    "gpt-4o-mini": {"original": 640, "compressed": 184},
+    "claude-3-5-sonnet-20240620": {"original": 612, "compressed": 176}
+  }
+}
+```
+
+## Errors
+- `400` → `token_models` must be a list of strings; payload must include `data`.
+- `429` → Token estimation rate limit exceeded (per model). Retry after `Retry-After`.
+
+## Notes
+- Token counts use Kaizen’s calibrated model tables; treat them as accurate estimates, not billing-grade numbers.
+- When you only care about prompt compression (no token stats), prefer `compress` to avoid the extra processing overhead.

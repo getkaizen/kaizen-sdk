@@ -1,0 +1,38 @@
+# Recipes
+
+Task-focused guides for common workflows.
+
+## 1. Integrate with Next.js API routes
+- Install `kaizen-client` plus `openai` extras inside your Next.js project.
+- Create `/pages/api/kaizen.js` (or `/app/api/kaizen/route.ts`) that instantiates a single Kaizen client at module scope.
+- In the handler, read the request body, call `await kaizen.prompts_encode({ "prompt": body })`, forward the `result` to OpenAI, and return `await kaizen.prompts_decode(...)`.
+- Cache the client between invocations by storing it in a singleton or global to avoid re-initializing on every request.
+
+## 2. Use the SDK inside a background job
+- Worker boot: `client = KaizenClient.from_env()` and keep it alive for the process lifetime.
+- Job handler: pull a message from your queue, call `await client.optimize_request(...)`, forward the compressed payload to the provider, then decode the response before acking the job.
+- Record the `stats` block to your metrics store so you can report savings per job, pipeline, or customer.
+
+## 3. Create a wrapper function
+```python
+from kaizen_client import with_kaizen_client
+
+@with_kaizen_client()
+async def encode_messages(*, messages, kaizen):
+    payload = {"prompt": {"messages": messages}, "token_models": ["gpt-4o-mini"]}
+    result = await kaizen.prompts_encode(payload)
+    return result["result"], result["stats"]
+```
+- Callers can pass `kaizen=my_existing_client` to reuse a shared instance during tests or batch jobs.
+
+## 4. Reuse client instances
+- Long-running services (FastAPI, Celery, serverless warm starts) should create the client once and share it via dependency injection or global state.
+- Example (FastAPI):
+  1. `app.state.kaizen = KaizenClient.from_env()`
+  2. Dependency returns `app.state.kaizen`
+  3. Lifespan handler closes the client when the app shuts down.
+
+## 5. Debug production responses
+- Enable `token_models` in `prompts_encode` during incident response to compare Kaizen’s savings vs. provider bills.
+- Log `encoded["stats"]`, `encoded["token_stats"]`, and the upstream request ID so you can trace anomalies.
+- When a response looks malformed, dump the raw `ktof` string plus `metadata` and rerun `prompts_decode` locally to confirm whether the issue came from the provider or downstream parsing.

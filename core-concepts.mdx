@@ -1,0 +1,30 @@
+# Core Concepts
+
+Understand the mental model behind Kaizen before diving into individual APIs.
+
+## Clients
+- `KaizenClient` is an async HTTPX wrapper (`python/kaizen_client/client.py`) that automatically configures the base URL, timeout, TLS verification, and headers.
+- Use `KaizenClient.from_env()` for short-lived scripts, or instantiate `KaizenClient(KaizenClientConfig(...))` to override timeouts, headers, or API hosts.
+- The client is an async context manager; always `async with` or call `await client.close()` to release sockets.
+
+## Requests & responses
+- Every write route accepts either plain dictionaries or the typed Pydantic models in `kaizen_client.models`.
+- Responses default to JSON dictionaries containing `operation`, `status`, `result`, and optional `stats`, `token_stats`, and `metadata` blocks.
+- Use the `metadata` field to pass correlation IDs; Kaizen echoes them back for observability.
+
+## Rate limits
+- Production SaaS imposes soft rate limits per account. Exceeding them returns HTTP `429` with a `Retry-After` header.
+- Native retry helpers are on the roadmap (`docs/TODO.md`); for now, back off manually and inspect `KaizenAPIError.headers` for retry hints.
+
+## Error handling
+- Network issues raise `KaizenRequestError` and include the original exception.
+- Non-2xx responses raise `KaizenAPIError` with `status_code`, `payload`, and headers so you can surface vendor-specific context.
+- Wrap critical sections in `try/except` and log `payload.get("detail")` when available.
+
+## Async vs sync usage
+- The core client is async; run it inside `asyncio.run()` or convert to sync with `asyncio.run(client.compress(...))`.
+- Provider wrappers currently new up synchronous vendor clients; until async variants ship, call them via `asyncio.to_thread` inside latency-sensitive services.
+
+## Retry behavior
+- HTTPX retry hooks are not enabled by default. If you need retries, wrap Kaizen calls in your own helper that catches `KaizenRequestError`/`KaizenAPIError` and reapplies exponential backoff.
+- Include idempotency keys (e.g., `default_headers={"X-Request-ID": ...}`) so retried requests can be traced in Kaizen logs.

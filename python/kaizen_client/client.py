@@ -163,7 +163,7 @@ class KaizenClient:
         headers = dict(self._config.default_headers)
         headers.setdefault("Content-Type", "application/json")
         if self._config.api_key:
-            headers["Authorization"] = f"Bearer {self._config.api_key}"
+            headers["x-api-key"] = f"Bearer {self._config.api_key}"
         return headers
 
     def _resolve_path(self, path: str) -> str:

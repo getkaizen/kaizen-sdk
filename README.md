@@ -1,7 +1,7 @@
 # Kaizen SDKs
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](python/pyproject.toml)
-[![Docs](https://img.shields.io/badge/docs-SDK%20Reference-8A2BE2)](docs/sdk_reference.md)
+[![Docs](https://img.shields.io/badge/docs-Python%20Guide-8A2BE2)](python/README.md)
 [![OpenAPI](https://img.shields.io/badge/spec-openapi.json-orange)](openapi.json)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -13,10 +13,10 @@ Compress prompts, shrink latency, and decode large-model responses using the **K
 
 ## Quick links
 
-- [SDK Reference](docs/sdk_reference.md) – exhaustive endpoint + field guide (“Kaizen SDK Knowledge Transfer”).
 - [Python package](python/README.md) – install, configure, and extend the current SDK.
 - [Examples](python/examples/README.md) – OpenAI, Anthropic, and Gemini wrappers.
-- [Architecture](docs/ARCHITECTURE.md) – repo layout and roadmap.
+- [Docs backlog](docs/TODO.md) – prioritized TODOs plus upcoming documentation work.
+- [Issue drafts](docs/ISSUE_DRAFTS.md) – pre-filled GitHub issues for the engineering backlog.
 
 ## Table of contents
 
@@ -62,7 +62,7 @@ flowchart LR
 | Path | Description |
 | ---- | ----------- |
 | `python/` | Python SDK source, tests, examples, and packaging (`python/README.md`). |
-| `docs/` | Architecture notes, SDK reference, and design records. |
+| `docs/` | Backlog (TODO) and pre-written issue drafts for upcoming work. |
 | `openapi.json` | Canonical Kaizen HTTP schema consumed by every SDK. |
 | `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `LICENSE` | Community policies and license. |
 
@@ -77,6 +77,8 @@ Future SDKs (e.g., `js/`, `go/`, `cli/`) will live alongside `python/` using the
 | Gemini | `kaizen_client.integrations.gemini.GeminiKaizenWrapper` | Works with Gemini 2.5 Flash via `google.generativeai`. |
 
 Want another provider? Follow the existing wrappers as templates inside `python/kaizen_client/integrations/`.
+
+> ⚠️ **Heads-up:** these wrappers currently call synchronous vendor SDKs from async methods. Until they migrate to `AsyncOpenAI` / `AsyncAnthropic` / `genai.aio`, run them outside latency-sensitive event loops (e.g., wrap invocations in `asyncio.to_thread`) to avoid blocking other coroutines.
 
 ## Coming soon
 
@@ -125,6 +127,20 @@ Follow this repo or reach out to `hello@getkaizen.ai` to join the preview progra
 
 5. **Explore examples** – Use the vendor walkthroughs in [`python/examples/README.md`](python/examples/README.md).
 
+## Examples
+
+Reference implementations live under [`python/examples/`](python/examples). Each script is async-friendly (uses `asyncio.run`) and closes the Kaizen client on exit. The table below mirrors [`python/examples/README.md`](python/examples/README.md); update both whenever you add or rename an example so they stay in sync.
+
+| Script | Highlights | Provider credentials |
+|--------|-----------|----------------------|
+| [`full_lifecycle.py`](python/examples/full_lifecycle.py) | Runs encode → decode → optimize_request/response → compress/decompress → health using only Kaizen. | `KAIZEN_API_KEY` |
+| [`openai_example.py`](python/examples/openai_example.py) | Shows `OpenAIKaizenWrapper` around the Responses API and prints token stats + decoded output. | `KAIZEN_API_KEY`, `OPENAI_API_KEY` |
+| [`anthropic_example.py`](python/examples/anthropic_example.py) | Demonstrates `AnthropicKaizenWrapper` with Claude Sonnet and logs the decoded reply. | `KAIZEN_API_KEY`, `ANTHROPIC_API_KEY` |
+| [`gemini_example.py`](python/examples/gemini_example.py) | Compresses a prompt before sending it to Gemini 2.5 Flash via `GeminiKaizenWrapper`. | `KAIZEN_API_KEY`, `GOOGLE_API_KEY` |
+| [`cost_comparison.py`](python/examples/cost_comparison.py) | Compares raw vs optimized byte/token counts (validated locally with `tiktoken`). | `KAIZEN_API_KEY`, optional `TIKTOKEN_CACHE_DIR` |
+
+Run any script via `python -m examples.<name>` or `python examples/<name>.py` from the `python/` directory after exporting the required environment variables.
+
 ## Environment targets
 
 - **Production (default):** `https://api.getkaizen.io/` – no action required unless you prefer explicit env vars.
@@ -155,6 +171,21 @@ async with KaizenClient() as kaizen:
     print(response["decoded"]["result"])
 ```
 
+### Lifecycle helper decorator
+
+Wrap ad-hoc workflows with `with_kaizen_client` so each invocation gets a managed client without manual `async with` blocks:
+
+```python
+from kaizen_client import with_kaizen_client
+
+@with_kaizen_client()
+async def run_report(*, kaizen, messages):
+    encoded = await kaizen.prompts_encode({"prompt": {"messages": messages}})
+    return encoded["result"]
+```
+
+See [`python/README.md`](python/README.md#managing-the-client-lifecycle) for the full walkthrough.
+
 ### Stats & metadata
 
 Every encode/optimize route returns:
@@ -162,7 +193,7 @@ Every encode/optimize route returns:
 - `stats` – original vs optimized lengths, reduction ratio, token deltas (when `token_models` provided).
 - `meta` – auto-detection hints, schemas, and your echoed `metadata` for observability.
 
-See [`docs/sdk_reference.md`](docs/sdk_reference.md) for the full envelope.
+See [`python/README.md`](python/README.md) for detailed payload fields and response envelopes.
 
 ## API surface summary
 
@@ -181,8 +212,8 @@ See [`docs/sdk_reference.md`](docs/sdk_reference.md) for the full envelope.
 
 | Doc | What you’ll find |
 | --- | ---------------- |
-| [`docs/sdk_reference.md`](docs/sdk_reference.md) | Endpoint-by-endpoint contract, payload tables, and implementation nuances. |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Repo structure, guiding principles, roadmap snapshot. |
+| [`docs/TODO.md`](docs/TODO.md) | Backlog of planned features, docs, and prioritization. |
+| [`docs/ISSUE_DRAFTS.md`](docs/ISSUE_DRAFTS.md) | Copy/paste-ready GitHub issues for engineering work. |
 | [`python/README.md`](python/README.md) | Python-specific installation, environment guidance, and helper docs. |
 | [`python/examples/README.md`](python/examples/README.md) | How to run each provider walkthrough with real credentials. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Development workflow, testing expectations, release process. |

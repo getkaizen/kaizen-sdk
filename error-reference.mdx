@@ -1,0 +1,37 @@
+# Error Reference
+
+How Kaizen surfaces failures and how to resolve them quickly.
+
+## SDK exception map
+
+| Exception | Trigger | Fix |
+| --- | --- | --- |
+| `KaizenRequestError` | HTTP transport failure (DNS, timeout, TLS) | Retry with backoff; inspect `original` exception |
+| `KaizenAPIError` | Non-2xx status from Kaizen API | Read `status_code`, `payload`, `headers` for context; adjust request |
+| `ValueError` | Response could not be parsed as JSON | Rare—usually indicates a proxy stripping headers; capture raw text |
+
+## HTTP codes
+
+| Code | Meaning | Resolution |
+| --- | --- | --- |
+| 400 | Invalid payload (missing `prompt`, schema mismatch) | Validate against Pydantic models before sending |
+| 401 | Missing/invalid `KAIZEN_API_KEY` | Regenerate or export the correct key; ensure Authorization header present |
+| 403 | Key lacks access to requested deployment | Confirm the endpoint and tenant match your key |
+| 404 | Endpoint typo (e.g., `/v1/promt/encode`) or stale `payload_id` | Use the documented routes; ensure the ID is still valid |
+| 429 | Rate limited | Honor `Retry-After` header, add exponential backoff, or contact support for higher limits |
+| 500/502/503 | Kaizen service disruption or upstream provider issue | Retry with jitter; escalate if persistent |
+
+## Bad vs. corrected requests
+
+| Scenario | Bad request | Fix |
+| --- | --- | --- |
+| Missing messages | `{"prompt": {}}` | `{"prompt": {"messages": [{"role": "user", "content": "Hello"}]}}` |
+| Empty ktof string | `{"ktof": ""}` | Store the encoded `result` returned by `prompts_encode` and pass it back verbatim |
+| Wrong token model type | `{"token_models": "gpt-4o"}` | `{"token_models": ["gpt-4o"]}` (list of strings) |
+| Forgot metadata dict | `{"metadata": "trace-1"}` | Wrap values: `{"metadata": {"trace_id": "trace-1"}}` |
+
+## Troubleshooting tips
+
+- Log the entire `KaizenAPIError.payload`—it often includes `detail`, `code`, and `request_id`.
+- Use `default_headers={"X-Request-ID": ...}` so support can trace your failing requests.
+- Validate payloads locally by instantiating the matching Pydantic model (e.g., `PromptEncodePayload(**payload)`); it raises faster than an HTTP round-trip.

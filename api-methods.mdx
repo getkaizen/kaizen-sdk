@@ -1,0 +1,23 @@
+# API Methods
+
+Every SDK call follows the same shape: send structured JSON, receive a KTOF payload (or decoded data), and inspect the stats to quantify savings. Use the links below for detailed, language-specific docs.
+
+| Method | Description | Request model | Response highlights |
+| --- | --- | --- | --- |
+| [`KaizenClient`](sdk/kaizen-client) | Configure base URL, headers, and lifecycle helpers. | `KaizenClientConfig` | Async context manager, env loading |
+| [`compress`](sdk/compress) | Generic JSON → KTOF compression with size stats. | `EncodeRequest` | `result`, `stats` |
+| [`decompress`](sdk/decompress) | Expand a KTOF string back into JSON. | `DecodeRequest` | `data`, `operation` |
+| [`optimize`](sdk/optimize) | Compression plus token stats in one round-trip. | `EncodeRequest` + `token_models` | `stats`, `token_stats` |
+| [`optimize_request`](sdk/optimize-request) | Encode raw provider payloads (messages, tools, metadata). | `OptimizeRequestPayload` | `result`, schema echoes |
+| [`optimize_response`](sdk/optimize-response) | Decode provider replies back into structured JSON. | `OptimizeResponsePayload` | `result` |
+| [`prompts_encode`](sdk/prompts-encode) | Auto-detect JSON snippets inside prompts and compress. | `PromptEncodePayload` | `result`, `stats`, optional `token_stats` |
+| [`prompts_decode`](sdk/prompts-decode) | Hydrate a `ktof` string by ID or inline payload. | `PromptDecodePayload` | `result`, `metadata`, `replay_meta` |
+| [`health`](sdk/health) | Lightweight readiness probe. | None | `status`, `uptime` (when enabled) |
+
+Implementation references:
+
+- Source: `python/kaizen_client/client.py`
+- Models: `python/kaizen_client/models.py`
+- Tests: `python/tests/test_client.py`
+
+Each method page includes the canonical request schema, code samples, expected responses, error shapes, and behavior notes.
