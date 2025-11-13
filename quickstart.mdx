@@ -3,23 +3,42 @@
 Fastest path to a working encode → decode round-trip.
 
 ## 1. Install & set secrets
+
 ```bash
-pip install kaizen-client[all]
+pip install kaizen-client
 export KAIZEN_API_KEY="kaizen_xxx"
 ```
 
 ## 2. Initialize the client
+
 ```python
-from kaizen_client import KaizenClient
-client = KaizenClient.from_env()
+import os
+from kaizen_client import KaizenClient, KaizenClientConfig
+
+# Explicit configuration for reliable environment loading
+config = KaizenClientConfig(
+    api_key=os.getenv("KAIZEN_API_KEY"),
+    base_url=os.getenv("KAIZEN_BASE_URL", "https://api.getkaizen.io/"),
+    timeout=float(os.getenv("KAIZEN_TIMEOUT", "30"))
+)
+client = KaizenClient(config)
 ```
 
 ## 3. Call the API
+
 ```python
 import asyncio
+import os
+from kaizen_client import KaizenClient, KaizenClientConfig
 
 async def main():
-    async with KaizenClient.from_env() as client:
+    config = KaizenClientConfig(
+        api_key=os.getenv("KAIZEN_API_KEY"),
+        base_url=os.getenv("KAIZEN_BASE_URL", "https://api.getkaizen.io/"),
+        timeout=float(os.getenv("KAIZEN_TIMEOUT", "30"))
+    )
+    
+    async with KaizenClient(config) as client:
         encoded = await client.prompts_encode({
             "prompt": {"messages": [{"role": "user", "content": "Compress me"}]},
             "token_models": ["gpt-4o-mini"]

@@ -10,7 +10,7 @@ Our stack relied heavily on structured JSON for document extraction because swit
 
 ## The Breakthrough: Token Optimization Without Structural Change
 
-We knew that prompt optimization could yield real savings if done safely. The challenge was preserving 100% correctness while trimming redundant data. So, we built a lightweight internal library called **Kaizen**  a token optimization layer designed to make JSON leaner and smarter.
+We knew that prompt optimization could yield real savings if done safely. The challenge was preserving 100% correctness while trimming redundant data. So, we built a lightweight internal library called **Kaizen,**  a token optimization layer designed to make JSON leaner and smarter.
 
 Kaizen’s first iteration focused on removing unnecessary whitespace, redundant keys, and repeated syntax elements. But as we scaled, we encountered nested JSON objects, CSV-like payloads, and SQL-style results. The complexity required a more intelligent compression logic.
 
@@ -29,7 +29,7 @@ Kaizen uses a deterministic encoder-decoder pipeline. Every payload passes throu
 
 ![case-study004.png](/images/case-study004.png)
 
-When benchmarked on our customer’s dataset, Kaizen achieved:
+When benchmarked on our customers’ dataset, Kaizen achieved:
 
 - 50–60% reduction in token usage, depending on document complexity.
 - Instant cost savings, as the same prompts consumed half the tokens per model call.
