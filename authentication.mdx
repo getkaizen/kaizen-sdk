@@ -35,16 +35,27 @@ client = KaizenClient(config)
 ## Successful authentication check
 ```python
 import asyncio
-from kaizen_client import KaizenClient
+import os
+from kaizen_client import KaizenClient, KaizenClientConfig
 
 async def main():
-    async with KaizenClient.from_env() as client:
-        response = await client.health()
-        print(response["status"])
+    # Ensure environment variables are loaded properly
+    config = KaizenClientConfig(
+        api_key=os.getenv("KAIZEN_API_KEY"),
+        base_url=os.getenv("KAIZEN_BASE_URL", "https://api.getkaizen.io/"),
+        timeout=float(os.getenv("KAIZEN_TIMEOUT", "30"))
+    )
+    
+    async with KaizenClient(config) as client:
+        response = await client.prompts_encode({
+            "prompt": {"messages": [{"role": "user", "content": "Test authentication"}]},
+            "token_models": ["gpt-4o-mini"]
+        })
+        print("Authentication successful! Reduction:", response["stats"]["reduction_ratio"])
 
 asyncio.run(main())
 ```
-You should see `ok` (or a similar status) when the API key is valid.
+You should see a successful response with compression stats when the API key is valid.
 
 ## Common mistakes
 - **Missing env vars** – the examples throw `RuntimeError` if `KAIZEN_API_KEY` or vendor keys are absent.
